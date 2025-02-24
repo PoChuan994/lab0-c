@@ -37,6 +37,22 @@ void q_free(struct list_head *head)
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
 {
+    /* input validation */
+    // if (!head)
+    // return false;
+    // element_t *element = malloc(sizeof(element_t));
+    /* memory allocation failure */
+    // if (!element)
+    // return false;
+    // char *str = malloc(sizeof(char) * (strlen(s) + 1));
+    /* input validation */
+    // if (!str) {
+    // free(element);
+    // return false;
+    //}
+    // strncpy(str, s, strlen(s) + 1);
+    // element->value = str;
+    // list_add(&element->list, head);
     return true;
 }
 
@@ -93,7 +109,12 @@ void q_swap(struct list_head *head)
 }
 
 /* Reverse elements in queue */
-void q_reverse(struct list_head *head) {}
+void q_reverse(struct list_head *head)
+{
+    struct list_head *current, *safe;
+    list_for_each_safe (current, safe, head)
+        list_move(current, head);
+}
 
 /* Reverse the nodes of the list k at a time */
 void q_reverseK(struct list_head *head, int k)
