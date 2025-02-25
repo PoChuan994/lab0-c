@@ -10,6 +10,21 @@
  *   cppcheck-suppress nullPointer
  */
 
+/* Create a new element with the provided string */
+static inline element_t *q_new_element(const char *s)
+{
+    element_t *new = malloc(sizeof(element_t));
+    char *tmp = strdup(s);
+
+    if (!new || !tmp) {
+        free(new);
+        free(tmp);
+        return NULL;
+    }
+    new->value = tmp;
+    return new;
+}
+
 /* Create an empty queue */
 struct list_head *q_new()
 {
@@ -37,22 +52,6 @@ void q_free(struct list_head *head)
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
 {
-    /* input validation */
-    // if (!head)
-    // return false;
-    // element_t *element = malloc(sizeof(element_t));
-    /* memory allocation failure */
-    // if (!element)
-    // return false;
-    // char *str = malloc(sizeof(char) * (strlen(s) + 1));
-    /* input validation */
-    // if (!str) {
-    // free(element);
-    // return false;
-    //}
-    // strncpy(str, s, strlen(s) + 1);
-    // element->value = str;
-    // list_add(&element->list, head);
     return true;
 }
 
