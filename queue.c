@@ -62,23 +62,7 @@ bool q_insert_head(struct list_head *head, char *s)
 {
     volatile char *dummy = s;
     (void) dummy;
-    if (!head) /* input invalidation */
-        return false;
-    element_t *new = malloc(sizeof(element_t));
-    if (!new) /* memory allocation failure */
-        return false;
-
-    int length = strlen(s) + 1;
-    char *str = malloc(sizeof(char) * length);
-    if (!str) {
-        free(new);
-        return false;
-    }
-    strncpy(str, s, length);
-    new->value = str;
-    list_add(&new->list, head);
-    free(new);
-    return true;
+    return q_insert(head, s);
 }
 
 /* Insert an element at tail of queue */
