@@ -33,6 +33,24 @@ static inline bool q_insert(struct list_head *node, const char *s)
     return true;
 }
 
+static inline element_t *q_remove(struct list_head *node,
+                                  char *sp,
+                                  size_t bufsize)
+{
+    if (!node || list_empty(node)) /* empty list check */
+        return NULL;
+
+    struct list_head *rmNode = node;
+    element_t *element = list_entry(rmNode, element_t, list);
+
+    list_del(rmNode);
+    if (sp) {
+        strncpy(sp, element->value, bufsize - 1);
+        sp[bufsize - 1] = 0;
+    }
+    return element;
+}
+
 /* Create an empty queue */
 struct list_head *q_new()
 {
