@@ -10,6 +10,28 @@
  *   cppcheck-suppress nullPointer
  */
 
+/* Insert node into queue */
+static inline bool q_insert(struct list_head *node, const char *s)
+{
+    if (!node) /* input validation */
+        return false;
+    element_t *new = malloc(sizeof(element_t));
+    if (!new)
+        return false; /* memory allocation failure */
+
+    int length = strlen(s) + 1;
+    char *str = malloc(sizeof(char) * (length + 1));
+    if (!str) { /* input validation and memory allocation detection */
+        free(new);
+        return false;
+    }
+
+    strncpy(str, s, length);
+    new->value = str;
+    list_add(&new->list, node);
+    free(new);
+    return true;
+}
 
 /* Create an empty queue */
 struct list_head *q_new()
