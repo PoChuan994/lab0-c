@@ -148,7 +148,6 @@ bool q_delete_dup(struct list_head *head)
     element_t *next_entry;
 
     while (&curr_entry->list != head) {
-        // list_for_each_entry_safe (curr_entry, next_entry, head, list) {
         next_entry = list_entry(curr_entry->list.next, element_t, list);
 
         while (&next_entry->list != head &&
