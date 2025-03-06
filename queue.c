@@ -258,26 +258,6 @@ void q_reverseK(struct list_head *head, int k)
     q_restruct(head);
 }
 
-/* meger each elements of queue in ascending/descending order */
-void merge(struct list_head *head,
-           struct list_head *left,
-           struct list_head *right,
-           bool descend)
-{
-    while (!list_empty(left) && !list_empty(right)) {
-        const element_t *l = list_entry(left->next, element_t, list);
-        const element_t *r = list_entry(right->next, element_t, list);
-        if (((descend * 2) - 1) * strcmp(l->value, r->value) > 0)
-            list_move_tail(left->next, head);
-        else
-            list_move_tail(right->next, head);
-    }
-    if (list_empty(head))
-        list_splice_tail(right, head);
-    else
-        list_splice_tail(left, head);
-}
-
 /* Sort elements of queue in ascending/descending order */
 void q_sort(struct list_head *head, bool descend)
 {
