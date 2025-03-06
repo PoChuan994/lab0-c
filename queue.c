@@ -122,6 +122,7 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
 
     list_del_init(head->next);
     return element;
+    // return q_remove(head->next, sp, bufsize);
 }
 
 /* Remove an element from tail of queue */
