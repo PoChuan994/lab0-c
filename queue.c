@@ -15,21 +15,23 @@ static inline bool q_insert(struct list_head *node, const char *s)
 {
     if (!node) /* input validation */
         return false;
+
+    /* allocate space for new item */
     element_t *new = malloc(sizeof(element_t));
+
     if (!new)
         return false; /* memory allocation failure */
 
-    int length = strlen(s) + 1;
-    char *str = malloc(sizeof(char) * (length + 1));
-    if (!str) { /* input validation and memory allocation detection */
+    new->value = malloc(sizeof(char) * (strlen(s) + 1));
+    /* input validation and memory allocation detection */
+    if (!new->value) {
         free(new);
         return false;
     }
 
-    strncpy(str, s, length);
-    new->value = str;
+    new->value = strncpy(new->value, s, (strlen(s) + 1));
     list_add(&new->list, node);
-    free(new);
+
     return true;
 }
 
