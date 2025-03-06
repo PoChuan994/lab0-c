@@ -39,9 +39,6 @@ static inline element_t *q_remove(struct list_head *node,
                                   char *sp,
                                   size_t bufsize)
 {
-    if (!node || list_empty(node)) /* empty list check */
-        return NULL;
-
     element_t *element = list_entry(node, element_t, list);
 
     if (!element)
@@ -114,9 +111,9 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
     if (!head || list_empty(head))
         return NULL;
 
-    element_t *tmp = list_entry(head->next, element_t, list);
+    element_t *element = list_entry(head->next, element_t, list);
 
-    if (!tmp)
+    if (!element)
         return NULL;
     if (sp) {
         strncpy(sp, list_entry(head->next, element_t, list)->value, bufsize);
@@ -124,7 +121,7 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
     }
 
     list_del_init(head->next);
-    return tmp;
+    return element;
 }
 
 /* Remove an element from tail of queue */
