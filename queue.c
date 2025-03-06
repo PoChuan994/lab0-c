@@ -176,26 +176,29 @@ bool q_delete_dup(struct list_head *head)
     if (!head || list_empty(head)) /* input validation */
         return false;
 
-    bool flag = false;
     element_t *curr_entry = list_first_entry(head, element_t, list);
-    element_t *next_entry;
-
     while (&curr_entry->list != head) {
-        next_entry = list_entry(curr_entry->list.next, element_t, list);
+        struct list_head *next = curr_entry->list.next;
+        element_t *next_entry = list_entry(next, element_t, list);
 
+        /* check if there is duplicate element */
+        bool check = false;
         while (&next_entry->list != head &&
                !strcmp(curr_entry->value, next_entry->value)) {
+            struct list_head *tmp = next_entry->list.next;
             list_del(&next_entry->list);
             q_release_element(next_entry);
-            /* update next pointer */
-            next_entry = list_entry(curr_entry->list.next, element_t, list);
-            flag = true;
+            next_entry = list_entry(tmp, element_t, list);
+            check = true;
         }
 
-        if (flag) { /*need remove current node*/
+        if (check) {
+            struct list_head *tmp = curr_entry->list.next;
             list_del(&curr_entry->list);
             q_release_element(curr_entry);
-            flag = false;
+            curr_entry = list_entry(tmp, element_t, list);
+        } else {
+            curr_entry = next_entry;
         }
     }
     return true;
