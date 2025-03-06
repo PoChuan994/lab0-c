@@ -281,26 +281,17 @@ void merge(struct list_head *head,
 /* Sort elements of queue in ascending/descending order */
 void q_sort(struct list_head *head, bool descend)
 {
-    if (!head || list_empty(head) || list_is_singular(head))
+    if (!head || head->next == head || head->prev == head->next)
         return;
-
-    struct list_head *slow = head->next, *fast = head->next->next;
-    while (fast != head && fast->next != head) {
+    struct list_head *slow = head;
+    const struct list_head *fast = head->next;
+    for (; fast != head && fast->next != head; fast = fast->next->next)
         slow = slow->next;
-        fast = fast->next->next;
-    }
-
-    struct list_head l, r;
-    INIT_LIST_HEAD(&l);
-    INIT_LIST_HEAD(&r);
-
-    list_cut_position(&l, head, slow);
-    list_splice_init(head, &r);
-
-    q_sort(&l, descend);
-    q_sort(&r, descend);
-
-    merge(head, &l, &r, descend);
+    struct list_head left;
+    list_cut_position(&left, head, slow);
+    q_sort(&left, descend);
+    q_sort(head, descend);
+    q_merge_two(head, &left, descend);
 }
 
 void q_merge_two(struct list_head *first,
