@@ -10,6 +10,11 @@
  *   cppcheck-suppress nullPointer
  */
 
+void q_merge_two(struct list_head *first,
+                 struct list_head *second,
+                 bool descend);
+
+
 /* Insert node into queue */
 static inline bool q_insert(struct list_head *node, const char *s)
 {
