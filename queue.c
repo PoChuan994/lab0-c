@@ -94,25 +94,7 @@ bool q_insert_head(struct list_head *head, char *s)
 {
     volatile char *dummy = s;
     (void) dummy;
-
-    if (!head)
-        return false;
-    /* malloc space for new entry item */
-    element_t *new = malloc(sizeof(element_t));
-
-    if (!new)
-        return false;
-
-    new->value = malloc(sizeof(char) * strlen(s) + 1);
-    if (!new->value) {
-        free(new);
-        return false;
-    }
-
-    new->value = strncpy(new->value, s, strlen(s) + 1);
-    list_add(&new->list, head);
-
-    return true;
+    return q_insert(head, s);
 }
 
 /* Insert an element at tail of queue */
