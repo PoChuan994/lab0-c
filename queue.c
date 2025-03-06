@@ -303,6 +303,33 @@ void q_sort(struct list_head *head, bool descend)
     merge(head, &l, &r, descend);
 }
 
+void q_merge_two(struct list_head *first,
+                 struct list_head *second,
+                 bool descend)
+{
+    if (!first || !second)
+        return;
+
+    struct list_head tmp;
+    INIT_LIST_HEAD(&tmp);
+    while (!list_empty(first) && !list_empty(second)) {
+        element_t *first_top = list_first_entry(first, element_t, list);
+        element_t *second_top = list_first_entry(second, element_t, list);
+        const char *first_str = first_top->value,
+                   *second_str = second_top->value;
+        bool check;
+        if (descend)
+            check = strcmp(first_str, second_str) > 0;
+        else
+            check = strcmp(first_str, second_str) < 0;
+        element_t *add_first = check ? first_top : second_top;
+        list_move_tail(&add_first->list, &tmp);
+    }
+    list_splice_tail_init(first, &tmp);
+    list_splice_tail_init(second, &tmp);
+    list_splice(&tmp, first);
+}
+
 /* Remove every node which has a node with a strictly less value anywhere to
  * the right side of it */
 int q_ascend(struct list_head *head)
