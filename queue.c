@@ -232,7 +232,7 @@ void q_reverse(struct list_head *head)
 void q_reverseK(struct list_head *head, int k)
 {
     // https://leetcode.com/problems/reverse-nodes-in-k-group/
-    if (!head || list_empty(head))
+    if (!head || list_empty(head) || k < 1)
         return;
 
     int cnt = 0;
@@ -242,17 +242,20 @@ void q_reverseK(struct list_head *head, int k)
     /* cut the list to be singly-linked list */
     head->prev->next = NULL;
 
-    for (struct list_head *sub_tail = head->next; sub_tail;
-         sub_tail = sub_tail->next) {
-        if (++cnt == k) {
-            next_head = sub_tail->next;
-            sub_tail->next = old_tail;
-            q_reverse(old_tail);
-            /* old node connects to the head of new list */
-            old_tail->next = sub_tail;
-            /* the new list connect to the next node */
+    for (struct list_head *node = head->next; node; node = node->next) {
+        cnt++;
+        if (cnt == k) {
+            next_head = node->next;
+            node->next = NULL;
+            q_reverse(sub_head); /* reverse k nodes */
+
+            /* reconnect */
+            if (old_tail)
+                old_tail->next = node;
             sub_head->next = next_head;
-            old_tail = sub_tail = sub_head;
+
+            /* update pointer */
+            old_tail = sub_head;
             sub_head = next_head;
             cnt = 0;
         }
