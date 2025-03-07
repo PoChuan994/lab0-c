@@ -58,18 +58,6 @@ static inline element_t *q_remove(struct list_head *node,
     return element;
 }
 
-static void q_restruct(struct list_head *head)
-{
-    struct list_head *curr = head, *nxt = curr->next;
-    while (nxt) {
-        nxt->prev = curr;
-        curr = nxt;
-        nxt = nxt->next;
-    }
-    curr->next = head;
-    head->prev = curr;
-}
-
 /* Create an empty queue */
 struct list_head *q_new()
 {
@@ -232,36 +220,23 @@ void q_reverse(struct list_head *head)
 void q_reverseK(struct list_head *head, int k)
 {
     // https://leetcode.com/problems/reverse-nodes-in-k-group/
-    if (!head || list_empty(head) || k < 1)
+    if (!head || head->next == head || k <= 1)
         return;
-
-    int cnt = 0;
-    struct list_head *sub_head = head->next, *next_head = NULL,
-                     *old_tail = head;
-
-    /* cut the list to be singly-linked list */
-    head->prev->next = NULL;
-
-    for (struct list_head *node = head->next; node; node = node->next) {
+    size_t cnt = 0;
+    struct list_head *curr = NULL, *safe = NULL, *start = head;
+    list_for_each_safe (curr, safe, head) {
         cnt++;
         if (cnt == k) {
-            next_head = node->next;
-            node->next = NULL;
-            q_reverse(sub_head); /* reverse k nodes */
-
-            /* reconnect */
-            if (old_tail)
-                old_tail->next = node;
-            sub_head->next = next_head;
-
-            /* update pointer */
-            old_tail = sub_head;
-            sub_head = next_head;
+            LIST_HEAD(tmp);
             cnt = 0;
+
+            list_cut_position(&tmp, start, curr);
+            q_reverse(&tmp);
+            list_splice(&tmp, start);
+
+            start = safe->prev;
         }
     }
-    /* restructure_list(head) */
-    q_restruct(head);
 }
 
 /* Sort elements of queue in ascending/descending order */
