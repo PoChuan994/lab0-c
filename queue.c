@@ -74,10 +74,10 @@ void q_free(struct list_head *head)
     if (!head)
         return;
 
-    struct list_head *current, *safe;
-    list_for_each_safe (current, safe, head) {
-        element_t *release_pos = list_entry(current, element_t, list);
-        q_release_element(release_pos);
+    struct list_head *curr, *safe;
+    list_for_each_safe (curr, safe, head) {
+        element_t *node = list_entry(curr, element_t, list);
+        q_release_element(node);
     }
     free(head);
 }
