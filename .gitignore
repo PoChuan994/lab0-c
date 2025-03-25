@@ -8,6 +8,7 @@ core*
 .cmd_history
 test*
 *.txt
+cachegrind*
 
 # ctags files
 TAGS
